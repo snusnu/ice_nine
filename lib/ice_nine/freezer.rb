@@ -84,7 +84,7 @@ module IceNine
     #
     # @api private
     def self.const_lookup(namespace)
-      const_get(namespace) if const_defined?(namespace, nil)
+      const_get(namespace) if const_defined?(namespace)
     end
 
     # Deep freeze an object with a particular Freezer and RecursionGuard

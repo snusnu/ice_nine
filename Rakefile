@@ -1,13 +1,11 @@
 # encoding: utf-8
 
-require 'devtools'
-Devtools.init_rake_tasks
+require 'bundler'
+Bundler::GemHelper.install_tasks
 
-Rake.application.load_imports
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec)
 
-task('metrics:mutant').clear
-namespace :metrics do
-  task mutant: :coverage do
-    $stderr.puts 'Zombie via devtools config is defunct mutant is disabled'
-  end
-end
+task :test    => :spec
+
+task :default => :spec

@@ -34,22 +34,24 @@ describe IceNine::Freezer::Range, '.deep_freeze' do
   end
 
   context 'with a Range' do
-    let(:value) { element_class.new(1)..element_class.new(100) }
+    let(:value) { 1..2 }
 
     context 'without a circular reference' do
-      it_behaves_like 'IceNine::Freezer::Range.deep_freeze'
-    end
+      it_behaves_like 'IceNine::Freezer::NoFreeze.deep_freeze'
 
-    context 'with a circular reference in the first element' do
-      before { value.begin.range = value }
+      it 'returns the object' do
+        should be(value)
+      end
 
-      it_behaves_like 'IceNine::Freezer::Range.deep_freeze'
-    end
+      it 'does not freeze the object' do
+        expect { subject }.to_not change(value, :frozen?).from(value.frozen?)
+      end
 
-    context 'with a circular reference in the last element' do
-      before { value.end.range = value }
-
-      it_behaves_like 'IceNine::Freezer::Range.deep_freeze'
+      it 'does not freeze instance variables' do
+        if subject.instance_variable_defined?(:@a)
+          expect(subject.instance_variable_get(:@a)).to_not be_frozen
+        end
+      end
     end
   end
 end
